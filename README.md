@@ -40,7 +40,7 @@ Aplikasi ini memiliki sistem otentikasi dengan dua jenis peran (*Role-based Acce
 3. Sesuaikan konfigurasi database Anda di dalam file konfigurasi server.
 4. Jalankan server:
    ```bash
-   node server.js
+   node app.js
    ```
    *Server secara default akan berjalan di port `3000`.*
 
@@ -59,11 +59,6 @@ Aplikasi ini memiliki sistem otentikasi dengan dua jenis peran (*Role-based Acce
    ```bash
    flutter run
    ```
-
----
-
-## 📱 Tangkapan Layar (Screenshots)
-*(Tambahkan gambar screenshot aplikasi di sini dengan format `![Nama Gambar](path/gambar.png)`)*
 
 ---
 
