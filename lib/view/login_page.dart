@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodel/auth_viewmodel.dart';
+import '../widgets/sipoin_logo.dart';
 import 'crud_page.dart';
 import 'home_page.dart';
 
@@ -63,34 +64,33 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Icon / Logo
-                Icon(
-                  Icons.admin_panel_settings,
-                  size: 100,
-                  color: primaryPeach,
-                ),
-                const SizedBox(height: 20),
+                    // Logo SIPOIN
+                    const SipoinLogo(
+                      width: 120,
+                      height: 120,
+                    ),
+                    const SizedBox(height: 24),
                 
-                // Title
-                Text(
-                  "Login",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: primaryPeach,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  "Silakan masuk ke dalam sistem",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
-                ),
-                const SizedBox(height: 48),
+                    // Title
+                    Text(
+                      "SIPOIN",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: primaryPeach,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      "Sistem Poin Siswa",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 48),
 
                 // Username Input
                 TextField(

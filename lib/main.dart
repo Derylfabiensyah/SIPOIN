@@ -32,6 +32,7 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => InputCatatanViewModel()),
       ],
       child: MaterialApp(
+        title: 'SIPOIN',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.deepOrange,

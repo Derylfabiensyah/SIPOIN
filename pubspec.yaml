@@ -1,7 +1,7 @@
-name: crud
-description: "A new Flutter project."
+name: sipoin
+description: "SIPOIN - Sistem Poin Siswa untuk mengelola poin pelanggaran dan prestasi"
 publish_to: 'none'
-version: 0.1.0+1
+version: 1.0.0+1
 
 environment:
   # sdk: ^3.11.0
@@ -20,3 +20,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  
+  # Daftarkan assets
+  assets:
+    - assets/Create_a_modern_minimalist_circular_202606022052.jpeg_202606022057.jpeg
