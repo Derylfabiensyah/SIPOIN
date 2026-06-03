@@ -13,10 +13,10 @@ void showJenisCatatanForm(BuildContext context, String tipe, {JenisCatatan? item
 
   showModalBottomSheet(
     context: context,
-    backgroundColor: Color(0xffeeeeee),
+    backgroundColor: Colors.white,
     isScrollControlled: true,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
     builder: (context) {
       bool isSaving = false;
@@ -35,34 +35,60 @@ void showJenisCatatanForm(BuildContext context, String tipe, {JenisCatatan? item
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 5,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
                   Text(
                     item == null ? "Tambah $tipe" : "Edit $tipe",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 20),
                   TextField(
                     controller: namaController,
                     decoration: InputDecoration(
-                      labelText: "Nama",
-                      border: OutlineInputBorder(),
+                      labelText: "Nama $tipe",
+                      prefixIcon: const Icon(Icons.label_outline, color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.grey[50],
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: Colors.grey.shade200)),
+                      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFF2563EB), width: 2)),
                     ),
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 16),
                   TextField(
                     controller: deskripsiController,
                     decoration: InputDecoration(
                       labelText: "Deskripsi",
-                      border: OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.description_outlined, color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.grey[50],
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: Colors.grey.shade200)),
+                      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFF2563EB), width: 2)),
                     ),
                     maxLines: 3,
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 16),
                   TextField(
                     controller: poinController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       labelText: "Poin",
-                      border: OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.star_outline, color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.grey[50],
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: Colors.grey.shade200)),
+                      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFF2563EB), width: 2)),
                     ),
                   ),
                   SizedBox(height: 20),
@@ -71,12 +97,23 @@ void showJenisCatatanForm(BuildContext context, String tipe, {JenisCatatan? item
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () => Navigator.pop(context),
-                          child: Text("Batal"),
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            side: const BorderSide(color: Colors.grey),
+                          ),
+                          child: const Text("Batal", style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold)),
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF2563EB),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            elevation: 0,
+                          ),
                           onPressed: isSaving
                               ? null
                               : () async {
@@ -151,7 +188,7 @@ void showJenisCatatanForm(BuildContext context, String tipe, {JenisCatatan? item
                                   }
                                 },
                           child: isSaving
-                              ? SizedBox(
+                              ? const SizedBox(
                                   height: 20,
                                   width: 20,
                                   child: CircularProgressIndicator(
@@ -159,7 +196,7 @@ void showJenisCatatanForm(BuildContext context, String tipe, {JenisCatatan? item
                                     color: Colors.white,
                                   ),
                                 )
-                              : Text("Simpan"),
+                              : const Text("Simpan", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                         ),
                       ),
                     ],
@@ -201,12 +238,12 @@ class _JenisCatatanPageState extends State<JenisCatatanPage> {
     final vm = Provider.of<JenisCatatanViewModel>(context);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF0F4FF),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded, color: Color(0xFFE09F8C)),
+          icon: const Icon(Icons.arrow_back_ios_rounded, color: Color(0xFF2563EB)),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -268,8 +305,8 @@ class _JenisCatatanPageState extends State<JenisCatatanPage> {
 
                 final isPerlanggaran = widget.tipe == "pelanggaran";
                 final badgeColor = isPerlanggaran
-                    ? const Color(0xFFE91E63) // Merah
-                    : const Color(0xFF4CAF50); // Hijau
+                    ? const Color(0xFFDC2626) // Merah
+                    : const Color(0xFF16A34A); // Hijau
 
                 return Container(
                   margin: const EdgeInsets.only(bottom: 12),
@@ -292,7 +329,7 @@ class _JenisCatatanPageState extends State<JenisCatatanPage> {
                         context: context,
                         builder: (context) {
                           return Dialog(
-                            backgroundColor: const Color(0xFFF9EAE5),
+                            backgroundColor: const Color(0xFFDBEAFE),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
@@ -307,7 +344,7 @@ class _JenisCatatanPageState extends State<JenisCatatanPage> {
                                     children: [
                                       Icon(
                                         isPerlanggaran ? Icons.report_problem : Icons.stars,
-                                        color: isPerlanggaran ? const Color(0xFFE91E63) : const Color(0xFF4CAF50),
+                                        color: isPerlanggaran ? const Color(0xFFDC2626) : const Color(0xFF16A34A),
                                       ),
                                       const SizedBox(width: 10),
                                       Expanded(
@@ -344,7 +381,7 @@ class _JenisCatatanPageState extends State<JenisCatatanPage> {
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                     decoration: BoxDecoration(
-                                      color: isPerlanggaran ? const Color(0xFFE91E63) : const Color(0xFF4CAF50),
+                                      color: isPerlanggaran ? const Color(0xFFDC2626) : const Color(0xFF16A34A),
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: Text(
@@ -480,7 +517,7 @@ class _JenisCatatanPageState extends State<JenisCatatanPage> {
             ),
       floatingActionButton: Provider.of<AuthViewModel>(context, listen: false).role == 'guru'
           ? FloatingActionButton(
-              backgroundColor: const Color(0xFFE09F8C),
+              backgroundColor: const Color(0xFF2563EB),
               onPressed: () {
                 showJenisCatatanForm(context, widget.tipe);
               },

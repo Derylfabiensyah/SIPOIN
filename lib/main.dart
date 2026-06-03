@@ -10,6 +10,7 @@ import 'package:crud/viewmodel/auth_viewmodel.dart';
 import 'package:crud/viewmodel/catatan_viewmodel.dart';
 import 'package:crud/viewmodel/poin_siswa_viewmodel.dart';
 import 'package:crud/viewmodel/input_catatan_viewmodel.dart';
+import 'package:crud/view/splash_page.dart';
 
 void main() {
   runApp(const MainApp());
@@ -35,10 +36,10 @@ class MainApp extends StatelessWidget {
         title: 'SIPOIN',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.deepOrange,
-          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFE09F8C)),
+          primarySwatch: Colors.blue,
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2563EB)),
         ),
-        home: const LoginPage(),
+        home: const SplashPage(),
       ),
     );
   }

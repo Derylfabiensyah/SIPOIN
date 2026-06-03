@@ -38,7 +38,7 @@ class _UserPageState extends State<UserPage>
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFE09F8C),
+        backgroundColor: const Color(0xFF2563EB),
         title: const Text(
           "APLIKASI SISWA",
           style: TextStyle(
@@ -54,7 +54,7 @@ class _UserPageState extends State<UserPage>
             borderRadius: BorderRadius.circular(10),
             color: Colors.white,
           ),
-          labelColor: const Color(0xFFE09F8C),
+          labelColor: const Color(0xFF2563EB),
           unselectedLabelColor: Colors.white,
           tabs: const [
             Tab(text: " Data Siswa"),

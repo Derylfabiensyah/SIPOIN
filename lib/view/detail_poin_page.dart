@@ -35,18 +35,18 @@ class _DetailPoinPageState extends State<DetailPoinPage> {
 
     // Theme colors
     final Color accentColor = isPelanggaran
-        ? const Color(0xFFE91E63)
-        : const Color(0xFF4CAF50);
+        ? const Color(0xFFDC2626)
+        : const Color(0xFF16A34A);
     final Color lightAccent = isPelanggaran
-        ? const Color(0xFFFCE4EC)
-        : const Color(0xFFE8F5E9);
+        ? const Color(0xFFFEE2E2)
+        : const Color(0xFFDCFCE7);
     final String title = isPelanggaran ? 'Detail Pelanggaran' : 'Detail Prestasi';
     final IconData headerIcon = isPelanggaran
         ? Icons.warning_amber_rounded
         : Icons.emoji_events_rounded;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF6F5),
+      backgroundColor: const Color(0xFFF0F4FF),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -74,8 +74,8 @@ class _DetailPoinPageState extends State<DetailPoinPage> {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: isPelanggaran
-                    ? [const Color(0xFFE91E63), const Color(0xFFFF5252)]
-                    : [const Color(0xFF4CAF50), const Color(0xFF66BB6A)],
+                    ? [const Color(0xFFDC2626), const Color(0xFFEF4444)]
+                    : [const Color(0xFF16A34A), const Color(0xFF22C55E)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),

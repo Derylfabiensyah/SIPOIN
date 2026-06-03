@@ -39,12 +39,12 @@ class _HomePageState extends State<HomePage> {
     final role = authVm.role ?? "Siswa";
 
     // Colors
-    final primaryPeach = const Color(0xFFE09F8C);
-    final secondaryPeach = const Color(0xFFF9EAE5);
+    final primaryBlue = const Color(0xFF2563EB);
+    final secondaryBlue = const Color(0xFFDBEAFE);
     final darkText = const Color(0xFF4A4A4A);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF6F5),
+      backgroundColor: const Color(0xFFF0F4FF),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                       child: IconButton(
-                        icon: Icon(Icons.logout_rounded, color: primaryPeach),
+                        icon: Icon(Icons.logout_rounded, color: primaryBlue),
                         onPressed: () {
                           authVm.logout();
                           Navigator.pushReplacement(
@@ -110,28 +110,31 @@ class _HomePageState extends State<HomePage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: role == 'guru'
-                    ? Row(
-                        children: [
-                          Expanded(
-                            child: _buildSummaryCard(
-                              "Data Siswa",
-                              "Kelola semua data siswa",
-                              Icons.people_alt_rounded,
-                              primaryPeach,
-                              () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DataSiswaPage())),
+                    ? IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                              child: _buildSummaryCard(
+                                "Data Siswa",
+                                "Kelola semua data siswa",
+                                Icons.people_alt_rounded,
+                                primaryBlue,
+                                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DataSiswaPage())),
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: _buildSummaryCard(
-                              "Input Catatan",
-                              "Input poin pelanggaran atau prestasi siswa",
-                              Icons.warning_amber_rounded,
-                              const Color(0xFFE91E63),
-                              () => Navigator.push(context, MaterialPageRoute(builder: (context) => const InputCatatanPage())),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: _buildSummaryCard(
+                                "Input Catatan",
+                                "Input poin pelanggaran atau prestasi siswa",
+                                Icons.warning_amber_rounded,
+                                const Color(0xFF16A34A),
+                                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const InputCatatanPage())),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       )
                     : Row(
                         children: [
@@ -140,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                               title: "Pelanggaran",
                               points: poinVm.isLoading ? "..." : "${poinVm.totalPelanggaran} POIN",
                               icon: Icons.warning_amber_rounded,
-                              gradientColors: [const Color(0xFFF04365), const Color(0xFFE91E63)],
+                              gradientColors: [const Color(0xFFDC2626), const Color(0xFFEF4444)],
                               iconBgColor: Colors.white.withOpacity(0.2),
                               onTap: () {
                                 if (authVm.userId != null) {
@@ -164,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                               title: "Prestasi",
                               points: poinVm.isLoading ? "..." : "${poinVm.totalPrestasi} POIN",
                               icon: Icons.emoji_events_rounded,
-                              gradientColors: [const Color(0xFF5DBB63), const Color(0xFF4CAF50)],
+                              gradientColors: [const Color(0xFF16A34A), const Color(0xFF22C55E)],
                               iconBgColor: Colors.white.withOpacity(0.2),
                               onTap: () {
                                 if (authVm.userId != null) {
@@ -217,14 +220,14 @@ class _HomePageState extends State<HomePage> {
                     context,
                     "Prestasi",
                     Icons.emoji_events_rounded,
-                    Colors.amber,
+                    const Color(0xFF16A34A),
                     () => Navigator.push(context, MaterialPageRoute(builder: (context) => const JenisCatatanPage(tipe: 'prestasi'))),
                   ),
                   _buildMenuItem(
                     context,
                     "Pelanggaran",
                     Icons.gavel_rounded,
-                    Colors.orange,
+                    const Color(0xFF2563EB),
                     () => Navigator.push(context, MaterialPageRoute(builder: (context) => const JenisCatatanPage(tipe: 'pelanggaran'))),
                   ),
                 ]),

@@ -57,8 +57,8 @@ class _JenisCatatanPageState extends State<JenisCatatanPage> {
                       ),
                       decoration: BoxDecoration(
                         color: widget.tipe == "pelanggaran"
-                            ? Colors.red
-                            : Colors.green,
+                            ? const Color(0xFFDC2626)
+                            : const Color(0xFF16A34A),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(

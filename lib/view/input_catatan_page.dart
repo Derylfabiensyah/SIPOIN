@@ -26,8 +26,8 @@ class _InputCatatanPageState extends State<InputCatatanPage> {
     final authVm = Provider.of<AuthViewModel>(context, listen: false);
 
     // Theme Colors
-    final primaryColor = const Color(0xFFE09F8C);
-    final backgroundColor = const Color(0xFFFDF6F5);
+    final primaryColor = const Color(0xFF2563EB);
+    final backgroundColor = const Color(0xFFF0F4FF);
     final cardColor = Colors.white;
     final textColor = const Color(0xFF4A4A4A);
 
@@ -119,7 +119,7 @@ class _InputCatatanPageState extends State<InputCatatanPage> {
                             title: "Pelanggaran",
                             value: "pelanggaran",
                             groupValue: vm.selectedTipe,
-                            color: const Color(0xFFE91E63),
+                            color: const Color(0xFFDC2626),
                             onChanged: (value) => vm.setSelectedTipe(value),
                           ),
                         ),
@@ -129,7 +129,7 @@ class _InputCatatanPageState extends State<InputCatatanPage> {
                             title: "Prestasi",
                             value: "prestasi",
                             groupValue: vm.selectedTipe,
-                            color: const Color(0xFF4CAF50),
+                            color: const Color(0xFF16A34A),
                             onChanged: (value) => vm.setSelectedTipe(value),
                           ),
                         ),

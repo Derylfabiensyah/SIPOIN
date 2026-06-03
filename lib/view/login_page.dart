@@ -16,8 +16,8 @@ class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   
-  // Using peach theme to match user's screenshot requirement (hex around #E4A18B)
-  final Color primaryPeach = const Color(0xFFE09F8C);
+  // Brand color: Blue from SIPOIN logo
+  final Color primaryBlue = const Color(0xFF2563EB);
 
   void _doLogin() async {
     final username = _usernameController.text.trim();
@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
     final authVm = Provider.of<AuthViewModel>(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xfffdf6f5), // Very light peach background matching the image
+      backgroundColor: const Color(0xFFF0F4FF), // Very light blue background matching the brand
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        color: primaryPeach,
+                        color: primaryBlue,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -97,13 +97,13 @@ class _LoginPageState extends State<LoginPage> {
                   controller: _usernameController,
                   decoration: InputDecoration(
                     labelText: "NIP / NIS",
-                    prefixIcon: Icon(Icons.person, color: primaryPeach),
+                    prefixIcon: Icon(Icons.person, color: primaryBlue),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: primaryPeach, width: 2),
+                      borderSide: BorderSide(color: primaryBlue, width: 2),
                     ),
                     filled: true,
                     fillColor: Colors.white,
@@ -117,13 +117,13 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: "Password",
-                    prefixIcon: Icon(Icons.lock, color: primaryPeach),
+                    prefixIcon: Icon(Icons.lock, color: primaryBlue),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: primaryPeach, width: 2),
+                      borderSide: BorderSide(color: primaryBlue, width: 2),
                     ),
                     filled: true,
                     fillColor: Colors.white,
@@ -136,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: 50,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryPeach,
+                      backgroundColor: primaryBlue,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),

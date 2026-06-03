@@ -13,10 +13,10 @@ void showUserForm(BuildContext context, {User? user}) {
 
   showModalBottomSheet(
     context: context,
-    backgroundColor: Color(0xffeeeeee),
-    isScrollControlled: true, // ⬅️ penting biar ikut keyboard
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    backgroundColor: Colors.white,
+    isScrollControlled: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
     builder: (context) {
       bool isSaving = false;
@@ -35,55 +35,88 @@ void showUserForm(BuildContext context, {User? user}) {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 🔹 Judul
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 5,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
                   Text(
-                    user == null ? "Tambah Data" : "Edit Data",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    user == null ? "Tambah Data Siswa" : "Edit Data Siswa",
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
 
                   SizedBox(height: 20),
 
-                  // 🔹 Input
                   TextField(
                     controller: namaController,
                     decoration: InputDecoration(
-                      labelText: "Nama",
-                      border: OutlineInputBorder(),
+                      labelText: "Nama Lengkap",
+                      prefixIcon: const Icon(Icons.person_outline, color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.grey[50],
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: Colors.grey.shade200)),
+                      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFF2563EB), width: 2)),
                     ),
                   ),
-                  SizedBox(height: 12),
-
+                  const SizedBox(height: 16),
                   TextField(
                     controller: kelasController,
                     decoration: InputDecoration(
                       labelText: "Kelas",
-                      border: OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.class_outlined, color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.grey[50],
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: Colors.grey.shade200)),
+                      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFF2563EB), width: 2)),
                     ),
                   ),
-                  SizedBox(height: 12),
-
+                  const SizedBox(height: 16),
                   TextField(
                     controller: nisController,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       labelText: "NIS",
-                      border: OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.badge_outlined, color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.grey[50],
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: Colors.grey.shade200)),
+                      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFF2563EB), width: 2)),
                     ),
                   ),
 
                   SizedBox(height: 20),
 
-                  // 🔹 Tombol
                   Row(
                     children: [
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () => Navigator.pop(context),
-                          child: Text("Batal"),
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            side: const BorderSide(color: Colors.grey),
+                          ),
+                          child: const Text("Batal", style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold)),
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF2563EB),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            elevation: 0,
+                          ),
                           onPressed: isSaving
                               ? null
                               : () async {
@@ -137,7 +170,7 @@ void showUserForm(BuildContext context, {User? user}) {
                                   }
                                 },
                           child: isSaving
-                              ? SizedBox(
+                              ? const SizedBox(
                                   height: 20,
                                   width: 20,
                                   child: CircularProgressIndicator(
@@ -145,7 +178,7 @@ void showUserForm(BuildContext context, {User? user}) {
                                     color: Colors.white,
                                   ),
                                 )
-                              : Text("Simpan"),
+                              : const Text("Simpan", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                         ),
                       ),
                     ],
@@ -185,12 +218,12 @@ class DataSiswaPage extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF0F4FF),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded, color: Color(0xFFE09F8C)),
+          icon: const Icon(Icons.arrow_back_ios_rounded, color: Color(0xFF2563EB)),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
@@ -230,10 +263,10 @@ class DataSiswaPage extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFE09F8C).withOpacity(0.1),
+                        color: const Color(0xFF2563EB).withOpacity(0.1),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.person, color: Color(0xFFE09F8C)),
+                      child: const Icon(Icons.person, color: Color(0xFF2563EB)),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
@@ -312,7 +345,7 @@ class DataSiswaPage extends StatelessWidget {
             },
           ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFFE09F8C),
+        backgroundColor: const Color(0xFF2563EB),
         onPressed: () {
           showUserForm(context);
         },

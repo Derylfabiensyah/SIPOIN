@@ -1,4 +1,4 @@
-name: sipoin
+name: crud
 description: "SIPOIN - Sistem Poin Siswa untuk mengelola poin pelanggaran dan prestasi"
 publish_to: 'none'
 version: 1.0.0+1
@@ -17,10 +17,37 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.7
 
 flutter:
   uses-material-design: true
   
   # Daftarkan assets
   assets:
-    - assets/Create_a_modern_minimalist_circular_202606022052.jpeg_202606022057.jpeg
+    - assets/logo_sipoin.png
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  web:
+    generate: true
+    image_path: "assets/logo_sipoin.png"
+  windows:
+    generate: true
+    image_path: "assets/logo_sipoin.png"
+  macos:
+    generate: true
+    image_path: "assets/logo_sipoin.png"
+  image_path: "assets/logo_sipoin.png"
+  min_sdk_android: 21
+
+flutter_native_splash:
+  color: "#F0F4FF"
+  image: "assets/transparent.png"
+  android: true
+  ios: true
+  web: false
+  android_12:
+    color: "#F0F4FF"
+    image: "assets/transparent.png"
