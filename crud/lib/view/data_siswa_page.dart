@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import '../viewmodel/crud_viewmodel.dart';
@@ -299,14 +300,25 @@ class DataSiswaPage extends StatelessWidget {
                         children: [
                           IconButton(
                             icon: const Icon(Icons.share_rounded, color: Colors.blue, size: 20),
-                            onPressed: () {
+                            onPressed: () async {
                               final String shareText = "AKUN CBTZIE\n\n"
                                   "Nama: ${user.nama}\n"
                                   "NIS: ${user.nis}\n"
                                   "Password: ${user.password ?? '-'}\n"
                                   "----------------\n\n"
                                   "Unduh Aplikasi CBTZie Versi terbaru di http://cbt.smkn1cianjur.sch.id/.";
-                              Share.share(shareText);
+                              try {
+                                await Share.share(shareText);
+                              } catch (e) {
+                                await Clipboard.setData(ClipboardData(text: shareText));
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Akun berhasil disalin ke Clipboard!"),
+                                    ),
+                                  );
+                                }
+                              }
                             },
                             constraints: const BoxConstraints(),
                             padding: const EdgeInsets.all(8),
