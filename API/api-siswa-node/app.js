@@ -1,31 +1,29 @@
 const express = require("express");
-const mysql = require("mysql2");
+const { Pool } = require("pg");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+require("dotenv").config();
 
 const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
 
-// --- KONEKSI KE MYSQL HOSTING ---
-const db = mysql.createConnection({
-  host: "localhost",
-  port: 3307,
-  user: "root",
-  password: "",
-  database: "db_sekolah",
+// --- KONEKSI KE SUPABASE POSTGRES ---
+const db = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
-db.connect((err) => {
+db.connect((err, client, release) => {
   if (err) {
     console.error("❌ Database Tidak Terhubung!", err);
     return;
   }
-  console.log("✅ Terhubung ke MySQL!");
-
-// --- INISIALISASI TABEL GURU DIBATALKAN KARENA TABEL SUDAH ADA ---
-  // Tabel Anda bernama 'guru' dan memiliki kolom: id_guru, nama, nip, email, password
+  console.log("✅ Terhubung ke Supabase PostgreSQL!");
+  release();
 });
 
 // --- ROUTES ---
@@ -38,8 +36,8 @@ app.get("/siswa", (req, res) => {
       console.log("❌ ERROR GET:", err);
       return res.status(500).send(err);
     }
-    console.log(`✅ GET berhasil - ${results.length} data`);
-    res.json(results);
+    console.log(`✅ GET berhasil - ${results.rows.length} data`);
+    res.json(results.rows);
   });
 });
 
@@ -49,7 +47,7 @@ app.post("/siswa", (req, res) => {
   console.log("📦 DATA MASUK:", req.body);
 
   const { nama, kelas, nis, password } = req.body;
-  const sql = "INSERT INTO siswa (nama, kelas, nis, password) VALUES (?, ?, ?, ?)";
+  const sql = "INSERT INTO siswa (nama, kelas, nis, password) VALUES ($1, $2, $3, $4) RETURNING id";
 
   db.query(sql, [nama, kelas, nis, password], (err, result) => {
     if (err) {
@@ -57,12 +55,13 @@ app.post("/siswa", (req, res) => {
       return res.status(500).send(err);
     }
 
-    console.log("✅ BERHASIL INSERT - ID:", result.insertId);
-    res.json({ message: "Data masuk!", id: result.insertId });
+    const insertId = result.rows[0].id;
+    console.log("✅ BERHASIL INSERT - ID:", insertId);
+    res.json({ message: "Data masuk!", id: insertId });
   });
 });
 
-// 3. Update Siswa (PUT ROUTE - TAMBAH INI)
+// 3. Update Siswa (PUT ROUTE)
 app.put("/siswa/:id", (req, res) => {
   console.log("✏️ UPDATE DATA ID:", req.params.id);
   console.log("📦 DATA:", req.body);
@@ -74,14 +73,14 @@ app.put("/siswa/:id", (req, res) => {
     return res.status(400).json({ message: "Field kosong!" });
   }
 
-  const sql = "UPDATE siswa SET nama = ?, kelas = ?, nis = ?, password = ? WHERE id = ?";
+  const sql = "UPDATE siswa SET nama = $1, kelas = $2, nis = $3, password = $4 WHERE id = $5";
   db.query(sql, [nama, kelas, nis, password, id], (err, result) => {
     if (err) {
       console.log("❌ ERROR:", err);
       return res.status(500).send(err);
     }
 
-    if (result.affectedRows === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({ message: "Data tidak ditemukan!" });
     }
 
@@ -95,7 +94,7 @@ app.delete("/siswa/:id", (req, res) => {
   console.log("🗑️ DELETE /siswa/:id");
   const { id } = req.params;
 
-  db.query("DELETE FROM siswa WHERE id = ?", [id], (err) => {
+  db.query("DELETE FROM siswa WHERE id = $1", [id], (err) => {
     if (err) {
       console.log("❌ ERROR DELETE:", err);
       return res.status(500).send(err);
@@ -109,10 +108,10 @@ app.delete("/siswa/:id", (req, res) => {
 app.get("/jenis_catatan/:tipe", (req, res) => {
   const { tipe } = req.params;
 
-  const sql = "SELECT * FROM jenis_catatan WHERE tipe = ?";
+  const sql = "SELECT * FROM jenis_catatan WHERE tipe = $1";
   db.query(sql, [tipe], (err, results) => {
     if (err) return res.status(500).send(err);
-    res.json(results);
+    res.json(results.rows);
   });
 });
 
@@ -125,10 +124,10 @@ app.post("/jenis_catatan", (req, res) => {
     return res.status(400).json({ status: false, message: "Field kosong!" });
   }
 
-  const sql = "INSERT INTO jenis_catatan (nama, deskripsi, tipe, poin) VALUES (?, ?, ?, ?)";
+  const sql = "INSERT INTO jenis_catatan (nama, deskripsi, tipe, poin) VALUES ($1, $2, $3, $4) RETURNING id_jenis";
   db.query(sql, [nama, deskripsi || "", tipe, poin], (err, result) => {
     if (err) return res.status(500).send(err);
-    res.json({ status: true, message: "Data masuk!", id: result.insertId });
+    res.json({ status: true, message: "Data masuk!", id: result.rows[0].id_jenis });
   });
 });
 
@@ -142,7 +141,7 @@ app.put("/jenis_catatan/:id", (req, res) => {
     return res.status(400).json({ status: false, message: "Field kosong!" });
   }
 
-  const sql = "UPDATE jenis_catatan SET nama = ?, deskripsi = ?, poin = ? WHERE id_jenis = ?";
+  const sql = "UPDATE jenis_catatan SET nama = $1, deskripsi = $2, poin = $3 WHERE id_jenis = $4";
   db.query(sql, [nama, deskripsi || "", poin, id], (err, result) => {
     if (err) return res.status(500).send(err);
     res.json({ status: true, message: "Data diupdate!" });
@@ -154,7 +153,7 @@ app.delete("/jenis_catatan/:id", (req, res) => {
   console.log("📝 DELETE /jenis_catatan/:id");
   const { id } = req.params;
 
-  const sql = "DELETE FROM jenis_catatan WHERE id_jenis = ?";
+  const sql = "DELETE FROM jenis_catatan WHERE id_jenis = $1";
   db.query(sql, [id], (err, result) => {
     if (err) return res.status(500).send(err);
     res.json({ status: true, message: "Data dihapus!" });
@@ -176,7 +175,7 @@ app.get("/catatan_recent", (req, res) => {
 
   const queryParams = [];
   if (id_guru) {
-    sql += " WHERE cs.id_guru = ? ";
+    sql += " WHERE cs.id_guru = $1 ";
     queryParams.push(id_guru);
   }
 
@@ -189,7 +188,7 @@ app.get("/catatan_recent", (req, res) => {
       console.log("❌ ERROR JOIN:", err);
       return res.status(500).send(err);
     }
-    res.json(results);
+    res.json(results.rows);
   });
 });
 
@@ -202,7 +201,7 @@ app.get("/poin_siswa/:id_siswa", (req, res) => {
     SELECT jc.tipe, COALESCE(SUM(jc.poin), 0) as total_poin
     FROM catatan_siswa cs
     JOIN jenis_catatan jc ON cs.id_jenis = jc.id_jenis
-    WHERE cs.id_siswa = ?
+    WHERE cs.id_siswa = $1
     GROUP BY jc.tipe
   `;
 
@@ -214,7 +213,7 @@ app.get("/poin_siswa/:id_siswa", (req, res) => {
 
     let pelanggaran = 0;
     let prestasi = 0;
-    for (const row of results) {
+    for (const row of results.rows) {
       if (row.tipe === "pelanggaran") pelanggaran = Number(row.total_poin);
       if (row.tipe === "prestasi") prestasi = Number(row.total_poin);
     }
@@ -234,7 +233,7 @@ app.get("/poin_siswa_detail/:id_siswa/:tipe", (req, res) => {
     FROM catatan_siswa cs
     JOIN jenis_catatan jc ON cs.id_jenis = jc.id_jenis
     JOIN guru g ON cs.id_guru = g.id_guru
-    WHERE cs.id_siswa = ? AND jc.tipe = ?
+    WHERE cs.id_siswa = $1 AND jc.tipe = $2
     ORDER BY cs.tanggal DESC
   `;
 
@@ -244,8 +243,8 @@ app.get("/poin_siswa_detail/:id_siswa/:tipe", (req, res) => {
       return res.status(500).send(err);
     }
 
-    console.log(`✅ Detail poin ${tipe} siswa ${id_siswa}: ${results.length} data`);
-    res.json(results);
+    console.log(`✅ Detail poin ${tipe} siswa ${id_siswa}: ${results.rows.length} data`);
+    res.json(results.rows);
   });
 });
 
@@ -260,15 +259,16 @@ app.post("/catatan_siswa", (req, res) => {
     return res.status(400).json({ status: false, message: "Field tidak lengkap!" });
   }
 
-  const sql = "INSERT INTO catatan_siswa (id_siswa, id_jenis, id_guru, tanggal) VALUES (?, ?, ?, CURDATE())";
+  const sql = "INSERT INTO catatan_siswa (id_siswa, id_jenis, id_guru, tanggal) VALUES ($1, $2, $3, CURRENT_DATE) RETURNING id_catatan";
   db.query(sql, [id_siswa, id_jenis, id_guru], (err, result) => {
     if (err) {
       console.log("❌ ERROR INSERT CATATAN:", err);
       return res.status(500).send(err);
     }
 
-    console.log("✅ BERHASIL INSERT CATATAN - ID:", result.insertId);
-    res.json({ status: true, message: "Catatan berhasil disimpan!", id_catatan: result.insertId });
+    const insertId = result.rows[0].id_catatan;
+    console.log("✅ BERHASIL INSERT CATATAN - ID:", insertId);
+    res.json({ status: true, message: "Catatan berhasil disimpan!", id_catatan: insertId });
   });
 });
 
@@ -283,44 +283,44 @@ app.post("/login", (req, res) => {
   }
 
   // Cek ke dalam tabel guru (username = nip, password = password)
-  const sqlGuru = "SELECT * FROM guru WHERE nip = ? AND password = ?";
+  const sqlGuru = "SELECT * FROM guru WHERE nip = $1 AND password = $2";
   db.query(sqlGuru, [username, password], (err, resultsGuru) => {
     if (err) {
       console.log("❌ LOGIN ERROR (GURU):", err);
       return res.status(500).json({ status: false, message: "Terjadi kesalahan server" });
     }
 
-    if (resultsGuru.length > 0) {
-      console.log(`✅ LOGIN BERHASIL (GURU): ${resultsGuru[0].nama}`);
+    if (resultsGuru.rows.length > 0) {
+      console.log(`✅ LOGIN BERHASIL (GURU): ${resultsGuru.rows[0].nama}`);
       return res.json({ 
         status: true, 
         message: "Login Berhasil", 
         data: { 
-          id: resultsGuru[0].id_guru, 
-          nama: resultsGuru[0].nama, 
+          id: resultsGuru.rows[0].id_guru, 
+          nama: resultsGuru.rows[0].nama, 
           role: "guru",
-          nip: resultsGuru[0].nip
+          nip: resultsGuru.rows[0].nip
         } 
       });
     } else {
       // Jika guru tidak ditemukan, cek ke dalam tabel siswa (username = nis, password = password)
-      const sqlSiswa = "SELECT * FROM siswa WHERE nis = ? AND password = ?";
+      const sqlSiswa = "SELECT * FROM siswa WHERE nis = $1 AND password = $2";
       db.query(sqlSiswa, [username, password], (err, resultsSiswa) => {
         if (err) {
           console.log("❌ LOGIN ERROR (SISWA):", err);
           return res.status(500).json({ status: false, message: "Terjadi kesalahan server" });
         }
 
-        if (resultsSiswa.length > 0) {
-          console.log(`✅ LOGIN BERHASIL (SISWA): ${resultsSiswa[0].nama}`);
+        if (resultsSiswa.rows.length > 0) {
+          console.log(`✅ LOGIN BERHASIL (SISWA): ${resultsSiswa.rows[0].nama}`);
           return res.json({ 
             status: true, 
             message: "Login Berhasil", 
             data: { 
-              id: resultsSiswa[0].id, 
-              nama: resultsSiswa[0].nama, 
+              id: resultsSiswa.rows[0].id, 
+              nama: resultsSiswa.rows[0].nama, 
               role: "siswa",
-              nis: resultsSiswa[0].nis
+              nis: resultsSiswa.rows[0].nis
             } 
           });
         } else {
@@ -339,3 +339,5 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`📌 Base URL: http://localhost:${PORT}`);
   console.log("✅ Siap menerima request\n");
 });
+
+module.exports = app;
