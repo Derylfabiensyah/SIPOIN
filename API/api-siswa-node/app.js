@@ -41,13 +41,45 @@ app.get("/siswa", (req, res) => {
   });
 });
 
+// Function to generate a neat password: 3-digit random prefix + 4-digit neat pattern (ABAB, AABB, A0B0, AA00)
+function generateNeatPassword() {
+  const prefix = Math.floor(100 + Math.random() * 900).toString();
+  const patterns = [
+    // ABAB
+    () => {
+      const a = Math.floor(Math.random() * 10);
+      const b = Math.floor(Math.random() * 10);
+      return `${a}${b}${a}${b}`;
+    },
+    // AABB
+    () => {
+      const a = Math.floor(Math.random() * 10);
+      const b = Math.floor(Math.random() * 10);
+      return `${a}${a}${b}${b}`;
+    },
+    // A0B0
+    () => {
+      const a = Math.floor(Math.random() * 10);
+      const b = Math.floor(Math.random() * 10);
+      return `${a}0${b}0`;
+    },
+    // AA00
+    () => {
+      const a = Math.floor(Math.random() * 9) + 1;
+      return `${a}${a}00`;
+    }
+  ];
+  const randomPattern = patterns[Math.floor(Math.random() * patterns.length)];
+  return prefix + randomPattern();
+}
+
 // 2. Post Siswa (Tambah Data)
 app.post("/siswa", (req, res) => {
   console.log("📝 POST /siswa");
   console.log("📦 DATA MASUK:", req.body);
 
   const { nama, kelas, nis, password } = req.body;
-  const finalPassword = password || nis || "12345";
+  const finalPassword = password || generateNeatPassword();
   const sql = "INSERT INTO siswa (nama, kelas, nis, password) VALUES ($1, $2, $3, $4) RETURNING id";
 
   db.query(sql, [nama, kelas, nis, finalPassword], (err, result) => {

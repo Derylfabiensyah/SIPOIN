@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import '../viewmodel/crud_viewmodel.dart';
 import '../model/crud_model.dart';
 import '../viewmodel/auth_viewmodel.dart';
@@ -296,6 +297,20 @@ class DataSiswaPage extends StatelessWidget {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          IconButton(
+                            icon: const Icon(Icons.share_rounded, color: Colors.blue, size: 20),
+                            onPressed: () {
+                              final String shareText = "AKUN CBTZIE\n\n"
+                                  "Nama: ${user.nama}\n"
+                                  "NIS: ${user.nis}\n"
+                                  "Password: ${user.password ?? '-'}\n"
+                                  "----------------\n\n"
+                                  "Unduh Aplikasi CBTZie Versi terbaru di http://cbt.smkn1cianjur.sch.id/.";
+                              Share.share(shareText);
+                            },
+                            constraints: const BoxConstraints(),
+                            padding: const EdgeInsets.all(8),
+                          ),
                           IconButton(
                             icon: const Icon(Icons.edit_rounded, color: Colors.blueGrey, size: 20),
                             onPressed: () => showUserForm(context, user: user),
