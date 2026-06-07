@@ -47,9 +47,10 @@ app.post("/siswa", (req, res) => {
   console.log("📦 DATA MASUK:", req.body);
 
   const { nama, kelas, nis, password } = req.body;
+  const finalPassword = password || nis || "12345";
   const sql = "INSERT INTO siswa (nama, kelas, nis, password) VALUES ($1, $2, $3, $4) RETURNING id";
 
-  db.query(sql, [nama, kelas, nis, password], (err, result) => {
+  db.query(sql, [nama, kelas, nis, finalPassword], (err, result) => {
     if (err) {
       console.log("❌ ERROR INSERT:", err);
       return res.status(500).send(err);
@@ -69,12 +70,22 @@ app.put("/siswa/:id", (req, res) => {
   const { id } = req.params;
   const { nama, kelas, nis, password } = req.body;
 
-  if (!nama || !kelas || !nis || !password) {
+  if (!nama || !kelas || !nis) {
     return res.status(400).json({ message: "Field kosong!" });
   }
 
-  const sql = "UPDATE siswa SET nama = $1, kelas = $2, nis = $3, password = $4 WHERE id = $5";
-  db.query(sql, [nama, kelas, nis, password, id], (err, result) => {
+  let sql;
+  let params;
+
+  if (password) {
+    sql = "UPDATE siswa SET nama = $1, kelas = $2, nis = $3, password = $4 WHERE id = $5";
+    params = [nama, kelas, nis, password, id];
+  } else {
+    sql = "UPDATE siswa SET nama = $1, kelas = $2, nis = $3 WHERE id = $4";
+    params = [nama, kelas, nis, id];
+  }
+
+  db.query(sql, params, (err, result) => {
     if (err) {
       console.log("❌ ERROR:", err);
       return res.status(500).send(err);
@@ -94,13 +105,33 @@ app.delete("/siswa/:id", (req, res) => {
   console.log("🗑️ DELETE /siswa/:id");
   const { id } = req.params;
 
-  db.query("DELETE FROM siswa WHERE id = $1", [id], (err) => {
+  db.query("SELECT id_siswa FROM siswa WHERE id = $1", [id], (err, result) => {
     if (err) {
-      console.log("❌ ERROR DELETE:", err);
+      console.log("❌ ERROR GET ID_SISWA:", err);
       return res.status(500).send(err);
     }
-    console.log("✅ BERHASIL DELETE ID:", id);
-    res.json({ message: "Data dihapus!" }); 
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Data tidak ditemukan!" });
+    }
+    
+    const idSiswa = result.rows[0].id_siswa;
+    
+    db.query("DELETE FROM catatan_siswa WHERE id_siswa = $1", [idSiswa], (err) => {
+      if (err) {
+        console.log("❌ ERROR DELETE CATATAN:", err);
+        return res.status(500).send(err);
+      }
+      
+      db.query("DELETE FROM siswa WHERE id = $1", [id], (err) => {
+        if (err) {
+          console.log("❌ ERROR DELETE SISWA:", err);
+          return res.status(500).send(err);
+        }
+        console.log("✅ BERHASIL DELETE ID:", id);
+        res.json({ message: "Data dihapus!" }); 
+      });
+    });
   });
 });
 
