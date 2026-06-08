@@ -41,6 +41,37 @@ app.get("/siswa", (req, res) => {
   });
 });
 
+// TEMPORARY: Update all siswa passwords to the new random neat pattern
+app.get("/siswa-update-all-passwords", (req, res) => {
+  console.log("🔄 GET /siswa-update-all-passwords");
+  
+  db.query("SELECT id, nama, nis FROM siswa", async (err, results) => {
+    if (err) {
+      console.log("❌ ERROR GET SISWA:", err);
+      return res.status(500).send(err);
+    }
+    
+    const students = results.rows;
+    console.log(`Found ${students.length} students. Restructuring passwords...`);
+    
+    const updatedList = [];
+    
+    try {
+      for (const student of students) {
+        const newPassword = generateNeatPassword();
+        await db.query("UPDATE siswa SET password = $1 WHERE id = $2", [newPassword, student.id]);
+        updatedList.push({ id: student.id, nama: student.nama, nis: student.nis, password: newPassword });
+      }
+      
+      console.log("✅ All passwords updated successfully!");
+      res.json({ status: true, message: "All passwords updated successfully!", updated: updatedList });
+    } catch (e) {
+      console.log("❌ ERROR UPDATING PASSWORDS:", e);
+      res.status(500).json({ status: false, error: e.message });
+    }
+  });
+});
+
 // Function to generate a neat password: 3-digit random prefix + 4-digit neat pattern (ABAB, AABB, A0B0, AA00)
 function generateNeatPassword() {
   const prefix = Math.floor(100 + Math.random() * 900).toString();
