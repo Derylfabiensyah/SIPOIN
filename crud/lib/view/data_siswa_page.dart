@@ -310,7 +310,7 @@ class DataSiswaPage extends StatelessWidget {
                                   "----------------------------------------\n\n"
                                   "Silakan gunakan akun di atas untuk login ke aplikasi SIPOIN.\n\n"
                                   "Unduh versi terbaru:\n"
-                                  "http://cbt.smkn1cianjur.sch.id/\n\n"
+                                  "https://github.com/Derylfabiensyah/SIPOIN/releases/latest\n\n"
                                   "Sistem Informasi Poin Siswa (SIPOIN)\n"
                                   "SMKN 1 Cianjur";
                               try {
