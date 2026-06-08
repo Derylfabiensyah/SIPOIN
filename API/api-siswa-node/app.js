@@ -70,7 +70,7 @@ function generateNeatPassword() {
     }
   ];
   const randomPattern = patterns[Math.floor(Math.random() * patterns.length)];
-  return prefix + randomPattern();
+  return prefix + randomPattern() + '*';
 }
 
 // 2. Post Siswa (Tambah Data)
