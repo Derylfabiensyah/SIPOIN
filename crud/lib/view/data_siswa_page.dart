@@ -301,12 +301,18 @@ class DataSiswaPage extends StatelessWidget {
                           IconButton(
                             icon: const Icon(Icons.share_rounded, color: Colors.blue, size: 20),
                             onPressed: () async {
-                              final String shareText = "AKUN CBTZIE\n\n"
-                                  "Nama: ${user.nama}\n"
-                                  "NIS: ${user.nis}\n"
-                                  "Password: ${user.password ?? '-'}\n"
-                                  "----------------\n\n"
-                                  "Unduh Aplikasi CBTZie Versi terbaru di http://cbt.smkn1cianjur.sch.id/.";
+                              final String shareText = "AKUN AKSES SIPOIN\n\n"
+                                  "Data Pengguna\n"
+                                  "----------------------------------------\n"
+                                  "Nama      : ${user.nama}\n"
+                                  "NIS       : ${user.nis}\n"
+                                  "Password  : ${user.password ?? '-'}\n"
+                                  "----------------------------------------\n\n"
+                                  "Silakan gunakan akun di atas untuk login ke aplikasi SIPOIN.\n\n"
+                                  "Unduh versi terbaru:\n"
+                                  "http://cbt.smkn1cianjur.sch.id/\n\n"
+                                  "Sistem Poin Pelanggaran Siswa\n"
+                                  "SMKN 1 Cianjur";
                               try {
                                 await Share.share(shareText);
                               } catch (e) {
