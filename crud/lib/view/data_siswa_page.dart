@@ -311,7 +311,7 @@ class DataSiswaPage extends StatelessWidget {
                                   "Silakan gunakan akun di atas untuk login ke aplikasi SIPOIN.\n\n"
                                   "Unduh versi terbaru:\n"
                                   "http://cbt.smkn1cianjur.sch.id/\n\n"
-                                  "Sistem Poin Pelanggaran Siswa\n"
+                                  "Sistem Informasi Poin Siswa (SIPOIN)\n"
                                   "SMKN 1 Cianjur";
                               try {
                                 await Share.share(shareText);
